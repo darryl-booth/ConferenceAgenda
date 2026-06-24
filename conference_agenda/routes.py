@@ -142,7 +142,9 @@ def agenda(org_slug, event_slug):
     sessions = []
     search_terms = query.casefold().split()
     for item in config["sessions"]:
-        if not item["visible"] or item["date"] != selected_day:
+        if not item["visible"]:
+            continue
+        if not search_terms and item["date"] != selected_day:
             continue
         searchable = " ".join(
             [
@@ -189,6 +191,7 @@ def agenda(org_slug, event_slug):
         selected_day=selected_day,
         today=today,
         query=query,
+        is_search=bool(search_terms),
         scroll_target_index=scroll_target_index,
         current_time_label=now.strftime("%-I:%M %p"),
         now=now,

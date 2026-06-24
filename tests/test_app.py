@@ -54,11 +54,15 @@ def test_public_agenda_and_info_are_accessible_without_login(client):
     assert b"Long Beach" in info.data
 
 
-def test_keyword_search_filters_sessions(client):
-    response = client.get("/ceha/aes-2026?day=2026-04-23&q=Darryl")
+def test_keyword_search_scans_all_days_and_labels_result_dates(client):
+    response = client.get("/ceha/aes-2026?day=2026-04-23&q=Shannon")
 
-    assert b"Practical AI Recipes for EH Professionals" in response.data
-    assert b"Evolving Cannabis Regulation" not in response.data
+    assert b"Introduction to Hazard Analysis Critical Control Point" in response.data
+    assert b"Introduction to Risk Based Inspection" in response.data
+    assert b"Monday, April 20" in response.data
+    assert b"Tuesday, April 21" in response.data
+    assert response.data.count(b'class="search-day-heading"') == 2
+    assert b"Search results across all conference days" in response.data
 
 
 def test_event_outside_date_range_defaults_to_first_day(client):

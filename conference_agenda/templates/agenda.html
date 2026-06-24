@@ -22,22 +22,30 @@
 
   <div class="day-strip" aria-label="Conference days">
     {% if today in event_days %}
-    <a class="day-pill today-pill {{ 'selected' if selected_day == today else '' }}" href="{{ url_for('main.agenda', org_slug=event.organization_slug, event_slug=event.slug, day='today', q=query or None) }}">Today</a>
+    <a class="day-pill today-pill {{ 'selected' if not is_search and selected_day == today else '' }}" href="{{ url_for('main.agenda', org_slug=event.organization_slug, event_slug=event.slug, day='today') }}">Today</a>
     {% endif %}
     {% for day in event_days %}
-    <a class="day-pill {{ 'selected' if day == selected_day else '' }}" href="{{ url_for('main.agenda', org_slug=event.organization_slug, event_slug=event.slug, day=day, q=query or None) }}">
+    <a class="day-pill {{ 'selected' if not is_search and day == selected_day else '' }}" href="{{ url_for('main.agenda', org_slug=event.organization_slug, event_slug=event.slug, day=day) }}">
       <small>{{ day | friendly_date }}</small>
     </a>
     {% endfor %}
   </div>
 
   <div class="agenda-status">
+    {% if is_search %}
+    <strong>Search results across all conference days</strong>
+    <span>{{ sessions | length }} matching {{ "session" if sessions | length == 1 else "sessions" }}</span>
+    {% else %}
     <strong>{{ selected_day | friendly_date }}</strong>
+    {% endif %}
   </div>
 </section>
 
 <section class="timeline" aria-live="polite">
   {% for session in sessions %}
+  {% if is_search and (loop.first or loop.previtem.date != session.date) %}
+  <h2 class="search-day-heading">{{ session.date | friendly_date }}</h2>
+  {% endif %}
   {% if loop.index0 == scroll_target_index %}
   <div class="current-time-marker" data-current-time-target>
     <span>Now</span>
@@ -69,7 +77,7 @@
   {% else %}
   <div class="empty-state">
     <h2>No matching sessions</h2>
-    <p>Try another day or clear the search.</p>
+    <p>Try a different keyword or clear the search.</p>
   </div>
   {% endfor %}
   {% if sessions and scroll_target_index == sessions | length %}

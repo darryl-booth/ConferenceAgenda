@@ -171,7 +171,16 @@ nav a.active, nav a:hover { background: var(--secondary); }
   padding: .6rem 0 1rem;
 }
 .agenda-status strong { font-family: Georgia, serif; font-size: 1.3rem; }
+.agenda-status span { color: var(--muted); font-size: .85rem; }
 .timeline { max-width: 940px; margin: auto; padding: 0 1.25rem; }
+.search-day-heading {
+  margin: 1.8rem 0 .75rem;
+  padding-bottom: .55rem;
+  color: var(--primary);
+  border-bottom: 2px solid var(--accent);
+  font-size: clamp(1.35rem, 3vw, 1.75rem);
+}
+.search-day-heading:first-child { margin-top: .35rem; }
 .session-card {
   display: grid;
   grid-template-columns: 145px minmax(0, 1fr);

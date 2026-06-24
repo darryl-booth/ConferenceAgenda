@@ -5,8 +5,8 @@ A small Flask application for publishing a mobile-friendly conference agenda fro
 ## What it includes
 
 - Readable public URLs such as `/ceha/aes-2026`
-- Day navigation, Today shortcut, keyword search, automatic current-time positioning,
-  and subdued styling for completed sessions
+- Day navigation, Today shortcut, event-wide keyword search with dated results,
+  automatic current-time positioning, and subdued styling for completed sessions
 - Session details including number, description, presenters, room, capacity, resources, track, and CECH
 - Branded conference information page
 - Excel template download and current-configuration download
