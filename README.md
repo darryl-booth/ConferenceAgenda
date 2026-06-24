@@ -71,3 +71,22 @@ pytest
 8. Reload the web app.
 
 The SQLite database is stored in `instance/conference_agenda.sqlite3`. Include that file in backups. Only one organizer should upload at a time, which is a good fit for the intended lightweight use and PythonAnywhere deployment.
+
+### Automatic deployment
+
+The GitHub Actions workflow in `.github/workflows/deploy.yaml` runs the test
+suite, uploads Git-tracked files through the PythonAnywhere API, and reloads the
+web app after every push to `main`.
+
+Create these GitHub repository secrets before enabling the workflow:
+
+- `PA_TOKEN`: the token from the API Token tab on your PythonAnywhere
+  account page
+- `PA_USERNAME`: your PythonAnywhere username, such as `darrylbooth`
+
+The workflow deploys to `/home/$PA_USERNAME/ConferenceAgenda` and reloads
+`$PA_USERNAME.pythonanywhere.com`. The untracked `instance/` directory is not
+uploaded, so deployment does not replace the live SQLite database.
+
+When `requirements.txt` changes, activate the PythonAnywhere virtual
+environment and run `pip install -r requirements.txt` once before reloading.
