@@ -1,0 +1,49 @@
+{% extends "event_shell.html" %}
+{% block title %}Conference Info · {{ conference.event_name }}{% endblock %}
+{% block content %}
+<section class="info-hero">
+  <p class="eyebrow">{{ conference.organization_name }}</p>
+  <h1>{{ conference.event_name }}</h1>
+  {% if conference.theme %}<p class="event-theme">{{ conference.theme }}</p>{% endif %}
+  {% if conference.welcome_text %}<p class="lede">{{ conference.welcome_text }}</p>{% endif %}
+</section>
+
+<section class="info-grid">
+  <article class="info-card info-card-accent">
+    <p class="card-kicker">When</p>
+    <h2>{{ conference.start_date | friendly_date }}<br>through {{ conference.end_date | friendly_date }}</h2>
+  </article>
+  <article class="info-card">
+    <p class="card-kicker">Venue</p>
+    <h2>{{ conference.venue_name or "Venue details coming soon" }}</h2>
+    {% if conference.venue_address %}<p>{{ conference.venue_address }}</p>{% endif %}
+  </article>
+  {% if conference.travel_info %}
+  <article class="info-card info-card-wide">
+    <p class="card-kicker">Getting there</p>
+    <h2>Travel and arrival</h2>
+    <p class="preserve-lines">{{ conference.travel_info }}</p>
+  </article>
+  {% endif %}
+  {% if conference.local_activities %}
+  <article class="info-card info-card-wide">
+    <p class="card-kicker">Between sessions</p>
+    <h2>Things to do nearby</h2>
+    <p class="preserve-lines">{{ conference.local_activities }}</p>
+  </article>
+  {% endif %}
+  <article class="info-card">
+    <p class="card-kicker">Need help?</p>
+    <h2>Conference support</h2>
+    <p>{{ conference.support_contact or "Visit the registration desk for assistance." }}</p>
+  </article>
+  {% if conference.website_url %}
+  <article class="info-card">
+    <p class="card-kicker">Official site</p>
+    <h2>More from the organizer</h2>
+    <a class="resource-link" href="{{ conference.website_url }}" target="_blank" rel="noopener">Visit conference website <span aria-hidden="true">↗</span></a>
+  </article>
+  {% endif %}
+</section>
+{% endblock %}
+

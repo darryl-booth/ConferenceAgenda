@@ -1,0 +1,60 @@
+{% extends "admin/dashboard.html" %}
+{% block title %}Manage {{ event.name }}{% endblock %}
+{% block content %}
+<section class="admin-page">
+  <a class="back-link" href="{{ url_for('main.admin_dashboard') }}">← All events</a>
+  <div class="page-heading">
+    <div>
+      <p class="eyebrow">{{ event.organization_name }}</p>
+      <h1>{{ event.name }}</h1>
+      <p class="public-url">Public URL: <a href="{{ url_for('main.agenda', org_slug=event.organization_slug, event_slug=event.slug) }}">/{{ event.organization_slug }}/{{ event.slug }}</a></p>
+    </div>
+    {% if revision %}<span class="version-badge">Live: config v{{ revision.version }}</span>{% endif %}
+  </div>
+
+  <div class="admin-columns">
+    <section class="admin-card">
+      <p class="card-kicker">Replace configuration</p>
+      <h2>Upload a revised workbook</h2>
+      <p>A successful upload becomes live immediately. The current version remains available below.</p>
+      <form class="stacked-form" method="post" enctype="multipart/form-data" action="{{ url_for('main.admin_upload', org_slug=event.organization_slug, event_slug=event.slug) }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+        <label>Excel workbook<input type="file" name="workbook" accept=".xlsx" required></label>
+        <label>Revision note <span>(optional)</span><input name="note" placeholder="Updated Thursday room assignments"></label>
+        <button type="submit">Validate and publish</button>
+      </form>
+    </section>
+    <section class="admin-card download-card">
+      <p class="card-kicker">Edit locally</p>
+      <h2>Download the live workbook</h2>
+      <p>Make changes in Excel, save it, then upload it as the next revision.</p>
+      {% if revision %}<a class="button button-secondary" href="{{ url_for('main.admin_download', org_slug=event.organization_slug, event_slug=event.slug) }}">Download config v{{ revision.version }}</a>{% endif %}
+    </section>
+  </div>
+
+  <section class="revision-section">
+    <div><p class="card-kicker">Safety net</p><h2>Revision history</h2></div>
+    <div class="revision-list">
+      {% for item in revisions %}
+      <article class="revision-row">
+        <div>
+          <strong>Version {{ item.version }}{% if revision and item.id == revision.id %} · Live{% endif %}</strong>
+          <span>{{ item.created_at }}</span>
+          <p>{{ item.note or "No revision note" }}</p>
+        </div>
+        <div class="revision-actions">
+          <a href="{{ url_for('main.admin_download_revision', org_slug=event.organization_slug, event_slug=event.slug, revision_id=item.id) }}">Download</a>
+          {% if not revision or item.id != revision.id %}
+          <form method="post" action="{{ url_for('main.admin_restore_revision', org_slug=event.organization_slug, event_slug=event.slug, revision_id=item.id) }}" onsubmit="return confirm('Restore version {{ item.version }} as a new live revision?')">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+            <button class="link-button" type="submit">Restore</button>
+          </form>
+          {% endif %}
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+</section>
+{% endblock %}
+

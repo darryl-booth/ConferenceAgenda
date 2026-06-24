@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block header %}
+<header class="event-header">
+  <div class="header-inner event-header-inner">
+    <a class="event-brand" href="{{ url_for('main.agenda', org_slug=event.organization_slug, event_slug=event.slug) }}">
+      {% if conference.logo_url %}
+      <img src="{{ conference.logo_url }}" alt="{{ conference.organization_name }} logo">
+      {% else %}
+      <span class="event-monogram">{{ conference.organization_name[:2] | upper }}</span>
+      {% endif %}
+      <span>
+        <small>{{ conference.organization_name }}</small>
+        <strong>{{ conference.event_name }}</strong>
+      </span>
+    </a>
+    <nav aria-label="Event navigation">
+      <a class="{{ 'active' if request.endpoint == 'main.agenda' else '' }}" href="{{ url_for('main.agenda', org_slug=event.organization_slug, event_slug=event.slug) }}">Agenda</a>
+      <a class="{{ 'active' if request.endpoint == 'main.event_info' else '' }}" href="{{ url_for('main.event_info', org_slug=event.organization_slug, event_slug=event.slug) }}">Conference info</a>
+    </nav>
+  </div>
+</header>
+{% endblock %}
+

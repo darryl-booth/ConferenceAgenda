@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Admin sign in{% endblock %}
+{% block content %}
+<section class="auth-shell">
+  <form class="admin-card" method="post">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+    <p class="eyebrow">Organizer access</p>
+    <h1>Update the conference</h1>
+    <p>Sign in to upload a workbook, download the current configuration, or restore an earlier version.</p>
+    <label>Username<input name="username" autocomplete="username" required autofocus></label>
+    <label>Password<input name="password" type="password" autocomplete="current-password" required></label>
+    <button type="submit">Sign in</button>
+  </form>
+</section>
+{% endblock %}
+

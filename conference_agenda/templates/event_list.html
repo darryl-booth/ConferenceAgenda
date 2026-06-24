@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Conferences{% endblock %}
+{% block content %}
+<section class="simple-page">
+  <p class="eyebrow">Upcoming programs</p>
+  <h1>Choose a conference</h1>
+  {% if events %}
+  <div class="event-grid">
+    {% for event in events %}
+    <a class="event-tile" href="{{ url_for('main.agenda', org_slug=event.organization_slug, event_slug=event.slug) }}">
+      <span>{{ event.organization_name }}</span>
+      <strong>{{ event.name }}</strong>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <h2>No events are live yet</h2>
+    <p>An organizer can publish the first event from the admin page.</p>
+    <a class="button" href="{{ url_for('main.admin_login') }}">Admin sign in</a>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}
+

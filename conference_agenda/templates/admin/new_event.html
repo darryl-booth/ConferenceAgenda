@@ -1,0 +1,17 @@
+{% extends "admin/dashboard.html" %}
+{% block title %}Create event{% endblock %}
+{% block content %}
+<section class="admin-page narrow-page">
+  <a class="back-link" href="{{ url_for('main.admin_dashboard') }}">← All events</a>
+  <p class="eyebrow">New event</p>
+  <h1>Create from a workbook</h1>
+  <p>The workbook’s organization and event slugs become the public URL. You can leave slug cells blank to generate them from the names.</p>
+  <form class="upload-panel" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+    <label>Excel workbook<input type="file" name="workbook" accept=".xlsx" required></label>
+    <label>Revision note <span>(optional)</span><input name="note" placeholder="Initial program from planning team"></label>
+    <button type="submit">Validate and publish</button>
+  </form>
+</section>
+{% endblock %}
+

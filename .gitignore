@@ -7,9 +7,12 @@ __pycache__/
 .pytest_cache/
 .venv/
 venv/
+node_modules
+instance/
 
 # Build and editor noise
 dist/
 build/
 .idea/
 .vscode/
+seed_data/*-preview.png

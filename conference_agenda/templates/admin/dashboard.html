@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Event admin{% endblock %}
+{% block header %}
+<header class="site-header admin-header">
+  <div class="header-inner">
+    <a class="brand" href="{{ url_for('main.admin_dashboard') }}"><img src="{{ url_for('static', filename='mark.svg') }}" alt="" width="34" height="34"><span>Agenda Admin</span></a>
+    <form method="post" action="{{ url_for('main.admin_logout') }}"><input type="hidden" name="_csrf_token" value="{{ csrf_token() }}"><button class="button-quiet">Sign out</button></form>
+  </div>
+</header>
+{% endblock %}
+{% block content %}
+<section class="admin-page">
+  <div class="page-heading">
+    <div><p class="eyebrow">Organizer workspace</p><h1>Events</h1></div>
+    <div class="heading-actions">
+      <a class="button button-secondary" href="{{ url_for('main.admin_download_template') }}">Download starter workbook</a>
+      <a class="button" href="{{ url_for('main.admin_new_event') }}">Create event from workbook</a>
+    </div>
+  </div>
+  <div class="admin-event-list">
+    {% for event in events %}
+    <article class="admin-event-row">
+      <div><small>{{ event.organization_name }}</small><h2>{{ event.name }}</h2><code>/{{ event.organization_slug }}/{{ event.slug }}</code></div>
+      <div class="row-meta"><span>Config v{{ event.version or "—" }}</span><a class="button button-secondary" href="{{ url_for('main.admin_event', org_slug=event.organization_slug, event_slug=event.slug) }}">Manage</a></div>
+    </article>
+    {% else %}
+    <div class="empty-state"><h2>No events yet</h2><p>Create the first one by uploading the conference workbook.</p></div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
